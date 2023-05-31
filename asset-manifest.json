@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/MedicalTourism_V2/static/css/main.b24c0f93.css",
+    "main.js": "/MedicalTourism_V2/static/js/main.2899cab0.js",
+    "static/media/test.png": "/MedicalTourism_V2/static/media/test.bc9d83325471917821a5.png",
+    "index.html": "/MedicalTourism_V2/index.html",
+    "main.b24c0f93.css.map": "/MedicalTourism_V2/static/css/main.b24c0f93.css.map",
+    "main.2899cab0.js.map": "/MedicalTourism_V2/static/js/main.2899cab0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b24c0f93.css",
+    "static/js/main.2899cab0.js"
+  ]
+}

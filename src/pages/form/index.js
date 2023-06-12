@@ -6,107 +6,100 @@ import { meta } from "../../content_option";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import { contactConfig } from "../../content_option";
 import { Typewriter } from "react-simple-typewriter";
+import Paper from '@mui/material/Paper';
+import { Button, Grid, Typography } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListItemButton from '@mui/material/ListItemButton';
 
-export const ContactUs = () => {
-    const [formData, setFormdata] = useState({
-        email: "",
-        name: "",
-        message: "",
-        loading: false,
-        show: false,
-        alertmessage: "",
-        variant: "",
-    });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setFormdata({ loading: true });
 
-        const templateParams = {
-            from_name: formData.email,
-            user_name: formData.name,
-            to_name: contactConfig.YOUR_EMAIL,
-            message: formData.message,
-        };
+export const Form = () => {
+    const q1 = "Which K-Beauty medical treatments are you interested in learning more about or considering?";
+    const [checked, setChecked] = React.useState([0]);
 
-        emailjs
-            .send(
-                contactConfig.YOUR_SERVICE_ID,
-                contactConfig.YOUR_TEMPLATE_ID,
-                templateParams,
-                contactConfig.YOUR_USER_ID
-            )
-            .then(
-                (result) => {
-                    console.log(result.text);
-                    setFormdata({
-                        loading: false,
-                        alertmessage: "SUCCESS! ,Thankyou for your messege",
-                        variant: "success",
-                        show: true,
-                    });
-                },
-                (error) => {
-                    console.log(error.text);
-                    setFormdata({
-                        alertmessage: `Faild to send!,${error.text}`,
-                        variant: "danger",
-                        show: true,
-                    });
-                    document.getElementsByClassName("co_alert")[0].scrollIntoView();
-                }
-            );
+    const handleToggle = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        setChecked(newChecked);
     };
-
-    const handleChange = (e) => {
-        setFormdata({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
+    const treatments = [
+        'Acne Scar Removal',
+        'Skin Brightening Treatments',
+        'Anti-Aging Treatments',
+        'Non-Surgical Facelift',
+        'Chemical Peels',
+        'Laser Skin Resurfacing',
+        'Micro-Needling Treatments',
+        'BB Glow Treatments',
+        'Non-Surgical Rhinoplasty',
+        'Skin Tightening Treatments',
+        'Other'
+    ];
     return (
         <HelmetProvider>
-            <Container>
-                <Helmet>
-                    <meta charSet="utf-8" />
-                    <title>{meta.title} | Contact</title>
-                    <meta name="description" content={meta.description} />
-                </Helmet>
-                <Row className="mb-1 mt-2 pt-md-2">
-                    <Col lg="12">
-                        <h6 className="display-6 mb-6">
-                            <Typewriter
-                                words={["Please select the treatmets you would be interested in:"]}
-                                typeSpeed={50}
-                            />
-                        </h6>
-                        <hr className="t_border my-4 ml-0 text-left" />
-                    </Col>
-                </Row>
-                <Row className="sec_sp">
-                    <Col lg="12">
-                        <h3 className="color_sec py-4">Get in touch</h3>
-                        <address>
-                            <strong>Email:</strong>{" "}
-                            <a href={`mailto:${contactConfig.YOUR_EMAIL}`}>
-                                {contactConfig.YOUR_EMAIL}
-                            </a>
-                            <br />
-                            <br />
-                            {contactConfig.hasOwnProperty("YOUR_FONE") ? (
-                                <p>
-                                    <strong>Phone:</strong> {contactConfig.YOUR_FONE}
-                                </p>
-                            ) : (
-                                ""
-                            )}
-                        </address>
-                        <p>{contactConfig.description}</p>
-                    </Col>
-                </Row>
-            </Container>
-            <div className={formData.loading ? "loading-bar" : "d-none"}></div>
+            <Paper elevation={3} sx={{
+                backgroundColor: '#282828',
+                borderRadius: '15px',
+                padding: '20px',
+                margin: '20px auto',
+                maxWidth: '80vw',
+            }}>
+                <Grid container justifyContent={"center"} direction="column" spacing={2}>
+                    <Grid item>
+                        <Typography variant="h4">{q1}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <List dense sx={{
+                            maxHeight: '60vh', // Adjust this value as needed
+                            overflow: 'auto',
+                        }}>
+                            {treatments.map((treatment, index) => {
+                                return (
+                                    <ListItem key={index} onClick={handleToggle(index)}>
+                                        <ListItemButton>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        edge="start"
+                                                        checked={checked.indexOf(index) !== -1}
+                                                        tabIndex={-1}
+                                                        disableRipple
+                                                        sx={{
+                                                            color: '#FFFFFF',
+                                                            '&$checked': {
+                                                                color: '#FFFFFF',
+                                                            },
+                                                        }}
+                                                    />
+                                                }
+                                                label={<ListItemText primary={treatment} sx={{ color: '#FFFFFF' }} />}
+                                            />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    </Grid>
+                    <Grid item style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button sx={{
+                            color: '#FFFFFF', borderColor: '#ffffff', '&:hover': {
+                                borderColor: '#BBBBBB',  // Set the hover color here
+                            },
+                        }} variant="outlined">Next</Button>
+                    </Grid>
+                </Grid>
+            </Paper>
         </HelmetProvider>
     );
 };
